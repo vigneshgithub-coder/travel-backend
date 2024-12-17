@@ -1,6 +1,6 @@
 // routes/bookingRoutes.js
 const express = require('express');
-const Booking = require('./models/Booking');
+const Booking = require('./models/booking');
 
 const router = express.Router();
 
