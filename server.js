@@ -38,7 +38,7 @@ app.use(cors({
  
 const app = express();
 
-app.use(cors());
+//app.use(cors());
 app.use(bodyParser.json());
 app.use('/api/packages', packageRoutes);
 app.use('/api/bookings', BookingRoute);
