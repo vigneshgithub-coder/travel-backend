@@ -36,8 +36,8 @@ const app = express();
 
 //app.use(cors());
 app.use(bodyParser.json());
-app.use('/api/packages', packages);
-app.use('/api/bookings', BookingRoutes);
+app.use('/api/packages', packageRoutes);
+app.use('/api/bookings', BookingRoute);
 
 app.use(cors({
   origin: 'https://effervescent-salamander-a23cca.netlify.app/', // Your Netlify frontend URL
