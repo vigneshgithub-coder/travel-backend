@@ -9,6 +9,8 @@ const fs = require('fs');
 const router = express.Router();
 const path = require('path');
 require('dotenv').config();
+const Booking = require('./models/Bookings'); 
+
 
 
 const bookingSchema = new mongoose.Schema({
@@ -66,7 +68,7 @@ app.post('/api/generate-invoice', async (req, res) => {
     const doc = new PDFDocument();
     
     // Set file path for the PDF invoice
-    const invoicePath = path.join(__dirname, 'invoices', `${name}_invoice.pdf`);
+    const invoicePath = path.join(__dirname, 'invoices', `${name}_invoices.pdf`);
     
     doc.pipe(fs.createWriteStream(invoicePath));
 
