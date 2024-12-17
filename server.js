@@ -29,11 +29,7 @@ const bookingSchema = new mongoose.Schema({
 
 //::contentReference[oaicite:0]{index=0}
 
-app.use(cors({
-  origin: 'https://effervescent-salamander-a23cca.netlify.app/', // Your Netlify frontend URL
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
-}));
+
 
  
 const app = express();
@@ -43,7 +39,11 @@ app.use(bodyParser.json());
 app.use('/api/packages', packageRoutes);
 app.use('/api/bookings', BookingRoute);
 
-
+app.use(cors({
+  origin: 'https://effervescent-salamander-a23cca.netlify.app/', // Your Netlify frontend URL
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+}));
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
