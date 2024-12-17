@@ -1,6 +1,8 @@
 // routes/bookingRoutes.js
 const express = require('express');
-const Booking = require('./models/booking');
+const Booking = require('../models/Booking'); // Case must match exactly
+
+
 
 const router = express.Router();
 
