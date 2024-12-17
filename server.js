@@ -28,6 +28,13 @@ const bookingSchema = new mongoose.Schema({
 // Endpoint to handle booking
 
 //::contentReference[oaicite:0]{index=0}
+const cors = require('cors');
+app.use(cors({
+  origin: 'https://effervescent-salamander-a23cca.netlify.app/', // Your Netlify frontend URL
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+}));
+
  
 const app = express();
 
