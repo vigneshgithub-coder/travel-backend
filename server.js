@@ -53,8 +53,15 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.log(err));
 
 //app.get('/', (req, res) => res.send('API is working!'));
-app.get('/', (req, res) => {
-  res.send('Welcome to the Travel Agency API!');
+
+app.get('/routes/packages', async (req, res) => {
+  try {
+    const packages = await Package.find();  // Fetch all packages
+    res.json(packages);  // Return the packages as a JSON response
+  } catch (error) {
+    console.error('Error fetching packages:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 
