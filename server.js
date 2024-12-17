@@ -53,8 +53,9 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.log(err));
 
 //app.get('/', (req, res) => res.send('API is working!'));
+console.log("MONGO_URI: ", process.env.MONGO_URI);
 
-app.get('/routes/packages', async (req, res) => {
+app.get('/api/packages', async (req, res) => {
   try {
     const packages = await Package.find();  // Fetch all packages
     res.json(packages);  // Return the packages as a JSON response
@@ -62,6 +63,19 @@ app.get('/routes/packages', async (req, res) => {
     console.error('Error fetching packages:', error);
     res.status(500).json({ message: 'Server Error' });
   }
+});
+router.get('/', async (req, res) => {
+  try {
+    const packages = await Package.find();
+    res.json(packages);
+  } catch (error) {
+    console.error('Error fetching packages:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error stack
+  res.status(500).send('Something went wrong!');
 });
 
 
