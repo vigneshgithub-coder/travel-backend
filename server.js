@@ -35,7 +35,7 @@ const bookingSchema = new mongoose.Schema({
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000', // Your Netlify frontend URL
+  origin: 'https://effervescent-salamander-a23cca.netlify.app/', // Your Netlify frontend URL
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
   credentials: true,
