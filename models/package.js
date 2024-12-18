@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const PackageSchema = new mongoose.Schema({
-  title: String,
+  name: String,
   description: String,
   price: Number,
   availableDates: [String],
