@@ -24,13 +24,6 @@ const bookingSchema = new mongoose.Schema({
   totalPrice: Number,
 });
 
-//const Booking = mongoose.model('Booking', bookingSchema);
-
-// Endpoint to handle booking
-
-//::contentReference[oaicite:0]{index=0}
-
-
 
  
 const app = express();
@@ -75,29 +68,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack); // Log the error stack
   res.status(500).send('Something went wrong!');
 });
-//  app.post('/api/bookings', async (req, res) => {
-//    const { name, email, phone, travelers, specialRequests, packageId, totalPrice } = req.body;
 
-//    // Create a new booking in the database
-//    const newBooking = new Booking({
-//      name,
-//      email,
-//      phone,
-//      travelers,
-//      specialRequests,
-//      packageId,   // Assuming this comes from the form submission
-//    totalPrice,
-//    });
-
-//   try {
-//      // Save the booking to the database
-//      await newBooking.save();
-//      res.status(201).json({ message: 'Booking successful', booking: newBooking });
-//    } catch (error) {
-//      console.error("Error creating booking:", error);
-//      res.status(500).json({ message: 'Error creating booking' });
-//    }
-    // Updated response code to handle file download better
 app.post('/api/generate-invoice', async (req, res) => {
   console.log(req.body);
   const { name, email, phone, travelers, packageName, price, bookingDate } = req.body;
@@ -156,8 +127,6 @@ app.post('/api/generate-invoice', async (req, res) => {
 });
 
   
-//  });
-
 
 
 const PORT = process.env.PORT || 5000;
