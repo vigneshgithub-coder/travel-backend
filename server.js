@@ -36,7 +36,7 @@ const bookingSchema = new mongoose.Schema({
 const app = express();
 
 app.use(cors({
-  origin: 'https://676d39597a84979cf792697e--effervescent-salamander-a23cca.netlify.app/', 
+  origin: 'https://effervescent-salamander-a23cca.netlify.app', 
   methods: ['GET', 'POST','PUT','DELETE'],
   allowedHeaders: ['Content-Type'],
   credentials: true,
@@ -44,11 +44,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use('/api/packages', packageRoutes);
 app.use('/api/bookings', BookingRoutes);
-
-// app.use(cors({
-//   origin: 'https://effervescent-salamander-a23cca.netlify.app/', // Your Netlify frontend URL
-//   methods: ['GET', 'POST'],
-//   allowedHeaders: ['Content-Type'],
+Headers: ['Content-Type'],
 // }));
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
