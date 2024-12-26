@@ -36,7 +36,7 @@ const bookingSchema = new mongoose.Schema({
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000/', // Your Netlify frontend URL
+  origin: 'https://676d39597a84979cf792697e--effervescent-salamander-a23cca.netlify.app/', 
   methods: ['GET', 'POST','PUT','DELETE'],
   allowedHeaders: ['Content-Type'],
   credentials: true,
