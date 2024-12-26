@@ -3,13 +3,14 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const packageRoutes = require('./routes/packages');
-const BookingRoute = require('./routes/BookingRoutes');
+const BookingRoutes = require('./routes/BookingRoutes');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const router = express.Router();
 const path = require('path');
 require('dotenv').config();
 const Booking = require('./models/Bookings'); 
+const invoicesDir = path.join(__dirname, 'invoices');
 
 
 
@@ -35,14 +36,14 @@ const bookingSchema = new mongoose.Schema({
 const app = express();
 
 app.use(cors({
-  origin: 'https://effervescent-salamander-a23cca.netlify.app/', // Your Netlify frontend URL
-  methods: ['GET', 'POST'],
+  origin: 'http://localhost:3000/', // Your Netlify frontend URL
+  methods: ['GET', 'POST','PUT','DELETE'],
   allowedHeaders: ['Content-Type'],
   credentials: true,
 }));
 app.use(bodyParser.json());
 app.use('/api/packages', packageRoutes);
-app.use('/api/bookings', BookingRoute);
+app.use('/api/bookings', BookingRoutes);
 
 // app.use(cors({
 //   origin: 'https://effervescent-salamander-a23cca.netlify.app/', // Your Netlify frontend URL
@@ -78,22 +79,40 @@ app.use((err, req, res, next) => {
   console.error(err.stack); // Log the error stack
   res.status(500).send('Something went wrong!');
 });
+//  app.post('/api/bookings', async (req, res) => {
+//    const { name, email, phone, travelers, specialRequests, packageId, totalPrice } = req.body;
 
+//    // Create a new booking in the database
+//    const newBooking = new Booking({
+//      name,
+//      email,
+//      phone,
+//      travelers,
+//      specialRequests,
+//      packageId,   // Assuming this comes from the form submission
+//    totalPrice,
+//    });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+//   try {
+//      // Save the booking to the database
+//      await newBooking.save();
+//      res.status(201).json({ message: 'Booking successful', booking: newBooking });
+//    } catch (error) {
+//      console.error("Error creating booking:", error);
+//      res.status(500).json({ message: 'Error creating booking' });
+//    }
+    // Updated response code to handle file download better
 app.post('/api/generate-invoice', async (req, res) => {
+  console.log(req.body);
   const { name, email, phone, travelers, packageName, price, bookingDate } = req.body;
 
-  // Create a new booking in the database
   const newBooking = new Booking({
     name,
     email,
     phone,
     travelers,
-    specialRequests: '', // You can handle this in the form if needed
-    packageId: null, // Add the package ID if available
+    specialRequests: '', // Handle this in the form if needed
+    packageId: null, // Add package ID if available
     totalPrice: price,
   });
 
@@ -103,16 +122,15 @@ app.post('/api/generate-invoice', async (req, res) => {
 
     // Create PDF document
     const doc = new PDFDocument();
-    
-    // Set file path for the PDF invoice
-    const invoicePath = path.join(__dirname, 'invoices', `${name}_invoices.pdf`);
-    
-    doc.pipe(fs.createWriteStream(invoicePath));
+    const invoicePath = path.join(invoicesDir, `${name}_invoices.pdf`);
+
+    const writeStream = fs.createWriteStream(invoicePath);
+    doc.pipe(writeStream);
 
     // Add invoice content
     doc.fontSize(20).text('Invoice', { align: 'center' });
     doc.fontSize(12).moveDown();
-    
+
     doc.text(`Booking Details:`);
     doc.text(`Name: ${name}`);
     doc.text(`Email: ${email}`);
@@ -121,16 +139,18 @@ app.post('/api/generate-invoice', async (req, res) => {
     doc.text(`Package: ${packageName}`);
     doc.text(`Price: $${price}`);
     doc.text(`Booking Date: ${bookingDate}`);
-    
+
     // Finalize PDF
     doc.end();
-    
-    // Send the file as a response
-    res.download(invoicePath, (err) => {
-      if (err) {
-        console.error("Error downloading the file", err);
-        res.status(500).send("Error generating invoice");
-      }
+
+    // When the file is written successfully, send it as a response
+    writeStream.on('finish', () => {
+      res.download(invoicePath, `${name}_invoice.pdf`, (err) => {
+        if (err) {
+          console.error("Error downloading the file", err);
+          res.status(500).send("Error generating invoice");
+        }
+      });
     });
 
   } catch (error) {
@@ -138,4 +158,12 @@ app.post('/api/generate-invoice', async (req, res) => {
     res.status(500).send("Error generating invoice");
   }
 });
+
+  
+//  });
+
+
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
